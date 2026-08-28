@@ -12,7 +12,7 @@ Live product page: <https://intent-voice-macros.sociobot.in>
 - Focus, click, page-top, page-bottom, and same-host navigation actions.
 - Automatic confirmation for navigation, links, submit controls, and actions labelled delete, remove, pay, send, publish, or sign out.
 - Local-only command cards and a 100-entry outcome log; no audio storage or analytics.
-- Five commands per site for free; a one-time $19 license raises the limit to ten.
+- Ten commands per site for free, matching the useful baseline; a one-time $19 license raises the limit to twenty-five.
 - JSON export, clear-log control, responsive options screen, and light/dark/reduced-motion treatments.
 
 This is a complement to—not a replacement for—platform accessibility tools such as Voice Access, Voice Control, Talon, or Dragon.
@@ -25,7 +25,7 @@ Requirements: Node.js 20+ and npm.
 npm install
 npm run dev          # WXT extension development
 npm run dev:site     # landing site at localhost
-npm test             # unit + desktop/mobile Playwright + Axe checks
+npm test             # generates WXT types, then runs unit + desktop/mobile Playwright + Axe checks
 npm run build        # extension, zip, and deployable site
 ```
 

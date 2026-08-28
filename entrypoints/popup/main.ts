@@ -1,7 +1,7 @@
 import { browser } from 'wxt/browser';
 import { matchMacro } from '../../lib/core';
 import { addLog, getState } from '../../lib/storage';
-import { canUsePaid } from '../../lib/license';
+import { commandLimit } from '../../lib/license';
 import type { Macro, PageActionResponse } from '../../lib/types';
 import './style.css';
 
@@ -179,7 +179,7 @@ async function init() {
   siteBadge.textContent = site || 'Unavailable page';
   const state = await getState();
   siteMacros = state.macros.filter((macro) => macro.site === site);
-  count.textContent = `${siteMacros.length} / ${canUsePaid(state.license) ? 10 : 5}`;
+  count.textContent = `${siteMacros.length} / ${commandLimit(state.license)}`;
   render();
   setupRecognition();
   ($('#offline') as HTMLElement).hidden = navigator.onLine;

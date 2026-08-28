@@ -1,8 +1,8 @@
 import { browser } from 'wxt/browser';
-import { normalizePhrase, safeNavigationUrl } from '../../lib/core';
+import { normalizeHostname, normalizePhrase, safeNavigationUrl } from '../../lib/core';
 import { ACTION_KINDS, type ActionKind, type Macro } from '../../lib/types';
 import { clearLogs, getState, setLicense, setMacros } from '../../lib/storage';
-import { canUsePaid, CHECKOUT_URL, shouldVerify, verifyLicense } from '../../lib/license';
+import { canUsePaid, CHECKOUT_URL, commandLimit, shouldVerify, verifyLicense } from '../../lib/license';
 import './style.css';
 
 const $ = <T extends Element>(selector: string) => document.querySelector<T>(selector)!;
@@ -21,7 +21,7 @@ function announce(message: string, error = false) {
   status.className = error ? 'status error' : 'status';
 }
 
-function limit(): number { return canUsePaid(state.license) ? 10 : 5; }
+function limit(): number { return commandLimit(state.license); }
 
 function updateFields() {
   const needsSelector = ['click', 'focus'].includes(kind.value);
@@ -93,7 +93,7 @@ function renderLogs() {
 function renderLicense() {
   const unlocked = canUsePaid(state.license);
   $('#license-state').innerHTML = unlocked
-    ? '<strong>Unlocked: 10 commands per website.</strong>'
+    ? '<strong>Unlocked: 25 commands per website.</strong>'
     : state.license?.reason
       ? `<strong>License no longer active.</strong> <span>${state.license.reason.replaceAll('_', ' ')}.</span>`
       : '<strong>Free plan active.</strong>';
@@ -118,12 +118,12 @@ async function suggestSite() {
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   const data = new FormData(form);
-  const site = String(data.get('site')).trim().toLocaleLowerCase().replace(/^https?:\/\//, '').split('/')[0];
+  const site = normalizeHostname(String(data.get('site')));
   const phrase = normalizePhrase(String(data.get('phrase')));
   const actionKind = String(data.get('kind')) as ActionKind;
   const selector = String(data.get('selector') ?? '').trim();
   const url = String(data.get('url') ?? '').trim();
-  if (!site || site.includes(' ') || !site.includes('.')) return announce('Enter a hostname such as example.com.', true);
+  if (!site) return announce('Enter only a hostname such as example.com, without https://, a port, or a page path.', true);
   if (!phrase) return announce('Enter the exact phrase you want to say.', true);
   if (!ACTION_KINDS.includes(actionKind)) return announce('Choose a supported browser action.', true);
   if (['click', 'focus'].includes(actionKind)) {
@@ -132,7 +132,7 @@ form.addEventListener('submit', async (event) => {
   }
   if (actionKind === 'navigate' && !safeNavigationUrl(url, site)) return announce('Navigation URLs must use HTTPS or HTTP and stay on the same hostname.', true);
   const existing = state.macros.filter((macro) => macro.site === site);
-  if (existing.length >= limit()) return announce(`This website already has ${limit()} commands. Delete one${limit() === 5 ? ' or unlock more room' : ''}.`, true);
+  if (existing.length >= limit()) return announce(`This website already has ${limit()} commands. Delete one${canUsePaid(state.license) ? '.' : ' or unlock more room.'}`, true);
   if (existing.some((macro) => normalizePhrase(macro.phrase) === phrase)) return announce('That phrase is already in use on this website.', true);
   const macro: Macro = {
     id: crypto.randomUUID(), site, phrase,
@@ -184,7 +184,7 @@ $('#license-form').addEventListener('submit', async (event) => {
   try {
     await setLicense(await verifyLicense(token));
     await refresh();
-    announce(canUsePaid(state.license) ? 'License verified. Ten commands per website are unlocked.' : 'That license is not active. Check the token or buy a new license.', !canUsePaid(state.license));
+    announce(canUsePaid(state.license) ? 'License verified. Twenty-five commands per website are unlocked.' : 'That license is not active. Check the token or buy a new license.', !canUsePaid(state.license));
   } catch (error) { announce(error instanceof Error ? error.message : 'Could not check the license.', true); }
 });
 

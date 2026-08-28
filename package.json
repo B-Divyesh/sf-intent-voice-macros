@@ -7,11 +7,15 @@
     "dev": "wxt",
     "dev:site": "vite --config vite.site.config.ts",
     "clean": "node scripts/clean.mjs",
+    "prepare:wxt": "wxt prepare",
+    "pretest": "npm run prepare:wxt && npm run build:extension",
+    "typecheck": "npm run prepare:wxt && tsc --noEmit",
     "build:extension": "wxt build && wxt zip",
     "build:site": "vite build --config vite.site.config.ts",
-    "build": "npm run clean && npm run build:extension && npm run build:site && node scripts/copy-extension.mjs",
+    "build": "npm run clean && npm run build:extension && npm run build:site && node scripts/copy-extension.mjs && node scripts/verify-package.mjs",
     "test": "vitest run && playwright test",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:package": "npm run build"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

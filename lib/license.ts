@@ -3,10 +3,17 @@ import type { LicenseCache } from './types';
 export const PRODUCT_SLUG = 'intent-voice-macros';
 export const BILLING_BASE = 'https://pilot-api.sociobot.in/api/v1';
 export const CHECKOUT_URL = `${BILLING_BASE}/products/${PRODUCT_SLUG}/checkout`;
+export const FREE_COMMAND_LIMIT = 10;
+export const PAID_COMMAND_LIMIT = 25;
 const ONE_DAY = 86_400_000;
 
 export function canUsePaid(cache?: LicenseCache): boolean {
   return Boolean(cache?.token && cache.valid);
+}
+
+/** The brief's smallest useful product is available without a purchase. */
+export function commandLimit(cache?: LicenseCache): number {
+  return canUsePaid(cache) ? PAID_COMMAND_LIMIT : FREE_COMMAND_LIMIT;
 }
 
 export async function verifyLicense(token: string): Promise<LicenseCache> {

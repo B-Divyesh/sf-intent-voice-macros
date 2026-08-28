@@ -25,7 +25,7 @@ async function verify(token: string) {
   if (!result.ok) throw new Error('License verification is unavailable. Try again when online.');
   const body = await result.json() as { valid: boolean; reason?: string };
   localStorage.setItem(CACHE_KEY, JSON.stringify({ ...body, checkedAt: Date.now() }));
-  const message = body.valid ? 'License verified. Paste this same token in the extension settings to unlock 10 commands per site.' : `License not active: ${(body.reason ?? 'invalid').replaceAll('_', ' ')}.`;
+  const message = body.valid ? 'License verified. Paste this same token in the extension settings to unlock 25 commands per site.' : `License not active: ${(body.reason ?? 'invalid').replaceAll('_', ' ')}.`;
   $('#license-status').textContent = message;
 }
 
@@ -34,7 +34,7 @@ if (token) {
   ($('#license') as HTMLInputElement).value = token;
   let cache: { valid?: boolean; checkedAt?: number } = {};
   try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) ?? '{}'); } catch { /* Verify below. */ }
-  if (cache.valid) $('#license-status').textContent = 'Saved license found. Paste it in the extension settings to unlock 10 commands per site.';
+  if (cache.valid) $('#license-status').textContent = 'Saved license found. Paste it in the extension settings to unlock 25 commands per site.';
   if (!cache.checkedAt || Date.now() - cache.checkedAt > DAY) void verify(token).catch((error) => { $('#license-status').textContent = error.message; });
 }
 

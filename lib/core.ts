@@ -1,5 +1,21 @@
 import type { Macro } from './types';
 
+/**
+ * Accept one canonical hostname, never a URL, port, path, or query string.
+ * Command lookup uses URL.hostname, so persisting anything else would create a
+ * command that can never be reached from the toolbar popup.
+ */
+export function normalizeHostname(value: string): string | undefined {
+  const hostname = value.trim().toLocaleLowerCase();
+  if (!hostname || /[\s/?#\\@]/.test(hostname)) return undefined;
+  try {
+    const parsed = new URL(`https://${hostname}`);
+    return parsed.hostname === hostname && hostname.includes('.') ? parsed.hostname : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function normalizePhrase(value: string): string {
   return value.trim().toLocaleLowerCase().replace(/[.,!?;:]+$/g, '').replace(/\s+/g, ' ');
 }
