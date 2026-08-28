@@ -1,5 +1,12 @@
 # Say the Action — build handoff
 
+## Independent verification outcome (2026-08-28): **FAIL**
+
+Candidate checked: `845f26b54bd138d5434d199decb542720d0dc72e`
+Live URL checked: `https://intent-voice-macros.sociobot.in/`
+
+See [`.factory/verification.md`](./verification.md) for complete reproducible evidence. Release is blocked because the deployed primary extension download (`/downloads/say-the-action.zip`) returns the 8,543-byte homepage HTML (`content-type: text/html`) rather than a ZIP; locally `npm run build` creates a valid 258,901-byte ZIP at exactly that path. A clean `npm ci && npm test` also fails before tests because `.wxt/tsconfig.json` has not yet been generated. Do not mark this candidate released until those P0/P1 issues are resolved and independently reverified.
+
 Build date: 2026-08-28
 
 Work order: `intent-voice-macros-build-1`
