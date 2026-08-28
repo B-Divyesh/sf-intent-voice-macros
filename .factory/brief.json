@@ -1,0 +1,16 @@
+{
+  "slug": "intent-voice-macros",
+  "title": "Say the Action",
+  "artifact_class": "browser-extension",
+  "user": "People with limited keyboard/mouse access who need a small, trustworthy voice-command layer for a few repeatable browser or coding actions.",
+  "smallest_useful_product": "Browser extension with on-device speech recognition where available, a visible command palette, 10 user-approved DOM actions per site, and a confirmation step for submit/delete/navigation.",
+  "success_measure": "At least 70% of pilot users successfully perform five configured actions by voice with no unintended destructive action over one week.",
+  "monetization": "one-time",
+  "constraints": [
+    "Push-to-talk by default",
+    "Local command logs",
+    "Explicit site and action allowlists",
+    "Confirmation for irreversible actions",
+    "Never present it as a replacement for platform accessibility tools"
+  ]
+}
