@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Say the Action</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to commands</a>
+    <header class="topbar">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Say the Action</span>
+      <span id="site-badge" class="site-badge">Checking site…</span>
+    </header>
+    <main id="main">
+      <h1>What should happen?</h1>
+      <p class="lede">Only exact phrases you approved for this site can run.</p>
+      <div id="offline" class="notice" hidden><strong>Offline.</strong> Saved commands still work. Voice recognition may depend on your browser’s installed language pack.</div>
+      <button id="listen" class="listen" type="button" aria-pressed="false">
+        <span class="listen-dot" aria-hidden="true"></span>
+        <span id="listen-label">Press to talk</span>
+      </button>
+      <form id="command-form" class="command-form">
+        <label for="phrase">Or type the exact phrase</label>
+        <div class="input-row">
+          <input id="phrase" name="phrase" autocomplete="off" spellcheck="false" />
+          <button type="submit">Run</button>
+        </div>
+      </form>
+      <p id="status" class="status" role="status" aria-live="polite">Ready. Nothing is listening.</p>
+      <section aria-labelledby="commands-heading">
+        <div class="section-heading">
+          <h2 id="commands-heading">Allowed here</h2>
+          <span id="count">0 / 5</span>
+        </div>
+        <ul id="commands" class="command-list"></ul>
+        <div id="empty" class="empty" hidden>
+          <strong>No commands for this site yet.</strong>
+          <span>Add a phrase and choose exactly what it may do.</span>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <button id="manage" class="text-button" type="button">Manage commands</button>
+      <span>Local only</span>
+    </footer>
+    <dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-copy">
+      <form method="dialog" class="dialog-card">
+        <p class="eyebrow">Safety check</p>
+        <h2 id="confirm-title">Run this action?</h2>
+        <p id="confirm-copy"></p>
+        <div class="dialog-actions">
+          <button id="cancel-action" value="cancel">Cancel</button>
+          <button id="run-action" class="danger-button" value="confirm">Run action</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

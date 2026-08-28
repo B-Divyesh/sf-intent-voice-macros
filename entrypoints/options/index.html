@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage commands — Say the Action</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to command setup</a>
+    <header>
+      <a class="brand" href="#main" aria-label="Say the Action home"><span aria-hidden="true"></span> Say the Action</a>
+      <p>Nothing listens until you press the button.</p>
+    </header>
+    <main id="main">
+      <section class="intro">
+        <div>
+          <p class="kicker">Command workshop</p>
+          <h1>Approve the words.<br />Approve the action.</h1>
+          <p class="lede">Each phrase belongs to one website and one visible browser action. Exact matches only—no guessing and no arbitrary code.</p>
+        </div>
+        <aside class="safety-note" aria-label="Safety model">
+          <strong>THE SMALL RULE</strong>
+          <span>Speak → match → inspect → confirm if risky → run.</span>
+        </aside>
+      </section>
+
+      <div id="offline" class="notice" hidden><strong>You’re offline.</strong> Editing and running saved commands still works. License verification will wait for a connection.</div>
+      <p id="status" class="status" role="status" aria-live="polite">Your setup is stored only in this browser.</p>
+
+      <section class="workbench" aria-labelledby="new-heading">
+        <div class="section-number" aria-hidden="true">01</div>
+        <div>
+          <h2 id="new-heading">Add an allowed command</h2>
+          <p>Selectors describe a page element, such as <code>#search</code> or <code>button.save</code>. Use your browser inspector to copy one.</p>
+        </div>
+        <form id="macro-form" class="macro-form">
+          <div class="field wide">
+            <label for="site">Website hostname</label>
+            <input id="site" name="site" placeholder="example.com" required autocomplete="url" />
+            <span class="hint">No <code>https://</code> or page path.</span>
+          </div>
+          <div class="field">
+            <label for="phrase">Phrase you’ll say</label>
+            <input id="phrase" name="phrase" placeholder="focus search" required maxlength="80" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="label">Action label</label>
+            <input id="label" name="label" placeholder="Focus search box" required maxlength="80" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="kind">Allowed action</label>
+            <select id="kind" name="kind">
+              <option value="focus">Focus an element</option>
+              <option value="click">Click an element</option>
+              <option value="scroll-top">Scroll to page top</option>
+              <option value="scroll-bottom">Scroll to page bottom</option>
+              <option value="navigate">Open a page on this site</option>
+            </select>
+          </div>
+          <div id="selector-field" class="field">
+            <label for="selector">CSS selector</label>
+            <input id="selector" name="selector" placeholder="#search" autocomplete="off" />
+          </div>
+          <div id="url-field" class="field" hidden>
+            <label for="url">Full page URL</label>
+            <input id="url" name="url" type="url" placeholder="https://example.com/issues" autocomplete="url" />
+          </div>
+          <label class="check-row wide">
+            <input id="confirm" name="confirm" type="checkbox" checked />
+            <span><strong>Ask before running</strong><small>Always enforced for navigation, submit, delete, payment, publish, and sign-out controls.</small></span>
+          </label>
+          <div class="form-actions wide">
+            <button class="primary" type="submit">Add command</button>
+            <span id="limit-copy">Free plan: 5 per website</span>
+          </div>
+        </form>
+      </section>
+
+      <section class="library" aria-labelledby="library-heading">
+        <div class="section-number" aria-hidden="true">02</div>
+        <div>
+          <h2 id="library-heading">Your command cards</h2>
+          <p>Review the whole allowlist. Deleting a card removes its permission immediately.</p>
+        </div>
+        <div class="library-actions">
+          <button id="export" type="button">Export setup</button>
+          <button id="clear-logs" type="button">Clear local log</button>
+        </div>
+        <div id="macro-groups"></div>
+        <div id="empty" class="empty-state">
+          <strong>Your allowlist is empty.</strong>
+          <span>Add one exact phrase above. A useful first command is “focus search”.</span>
+        </div>
+      </section>
+
+      <section class="license" aria-labelledby="license-heading">
+        <div class="section-number" aria-hidden="true">03</div>
+        <div>
+          <p class="kicker">One-time unlock · $19</p>
+          <h2 id="license-heading">More room, same safety</h2>
+          <p>Free includes 5 commands per site. The one-time unlock raises that to 10. Confirmations, keyboard access, export, and local storage are free for everyone.</p>
+        </div>
+        <div class="license-card">
+          <p id="license-state"><strong>Free plan active.</strong></p>
+          <a id="buy" class="primary link-button" href="https://pilot-api.sociobot.in/api/v1/products/intent-voice-macros/checkout" target="_blank" rel="noopener">Buy once for $19</a>
+          <form id="license-form">
+            <label for="license-token">Have a license? Paste it</label>
+            <div class="inline-form">
+              <input id="license-token" name="license-token" autocomplete="off" spellcheck="false" />
+              <button type="submit">Verify</button>
+            </div>
+          </form>
+          <p class="legal-copy">Checkout and refunds are handled by Sociobot/Dodo, the merchant of record. <a href="https://intent-voice-macros.sociobot.in/privacy" target="_blank" rel="noopener">Privacy</a> · <a href="https://intent-voice-macros.sociobot.in/terms" target="_blank" rel="noopener">Terms</a></p>
+        </div>
+      </section>
+
+      <section class="log-section" aria-labelledby="log-heading">
+        <div>
+          <h2 id="log-heading">Local activity log</h2>
+          <p>Up to 100 recent attempts are kept on this device. No audio is stored.</p>
+        </div>
+        <ul id="logs" class="log-list"></ul>
+        <p id="logs-empty">No commands have run yet.</p>
+      </section>
+    </main>
+    <footer>
+      <p>Say the Action complements—not replaces—your platform’s accessibility tools.</p>
+      <span>Version 1.0.0 · Local-first</span>
+    </footer>
+
+    <dialog id="delete-dialog" aria-labelledby="delete-title">
+      <form method="dialog" class="dialog-card">
+        <p class="kicker">Remove permission</p>
+        <h2 id="delete-title">Delete this command?</h2>
+        <p id="delete-copy"></p>
+        <div class="dialog-actions">
+          <button value="cancel">Keep command</button>
+          <button value="confirm" class="danger">Delete command</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
