@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Say the Action is a small, local-first browser extension for a few voice-approved browser actions." />
+    <meta name="theme-color" content="#F4F0E6" />
+    <title>Say the Action — voice commands you approve</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/assets/hero-control.avif" as="image" type="image/avif" imagesrcset="/assets/hero-control-640.avif 640w, /assets/hero-control.avif 960w" imagesizes="(max-width: 800px) calc(100vw - 40px), 52vw" fetchpriority="high" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div id="offline" class="offline" hidden role="status"><strong>You’re offline.</strong> This page is cached; the extension itself keeps saved commands local.</div>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Say the Action home"><span aria-hidden="true"></span> Say the Action</a>
+      <nav aria-label="Primary navigation">
+        <a href="#how">How it works</a>
+        <a href="#safety">Safety</a>
+        <a class="nav-download" href="/downloads/say-the-action.zip">Download</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span>Browser extension</span> · Local-first</p>
+          <h1>Say only<br />the action.</h1>
+          <p class="hero-lede">A small voice-command layer for the browser actions you repeat. You choose the phrase, the site, and the one thing it can do.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="/downloads/say-the-action.zip" download>Download extension <span aria-hidden="true">↓</span></a>
+            <a class="button quiet" href="#try">Try the command card</a>
+          </div>
+          <p class="compatibility">Chrome/Edge MV3 · On-device speech where the browser supports it · Typed fallback included</p>
+        </div>
+        <figure class="hero-art">
+          <picture>
+            <source srcset="/assets/hero-control-640.avif 640w, /assets/hero-control.avif 960w" sizes="(max-width: 800px) calc(100vw - 40px), 52vw" type="image/avif" />
+            <source srcset="/assets/hero-control-640.webp 640w, /assets/hero-control.webp 960w" sizes="(max-width: 800px) calc(100vw - 40px), 52vw" type="image/webp" />
+            <img src="/assets/hero-control.png" width="960" height="640" alt="A red push-to-talk switch sends one lemon command card along a short rail into a browser window." fetchpriority="high" loading="eager" decoding="async" />
+          </picture>
+          <figcaption><span>01</span> One phrase travels on one approved rail.</figcaption>
+        </figure>
+      </section>
+
+      <section id="try" class="demo-section" aria-labelledby="demo-heading">
+        <div class="section-tag" aria-hidden="true">TRY IT</div>
+        <div class="demo-copy">
+          <h2 id="demo-heading">A command should be inspectable.</h2>
+          <p>This preview never controls the page. Press the switch or type “focus search” to see the exact-match and confirmation flow.</p>
+        </div>
+        <div class="demo" aria-label="Interactive command flow preview">
+          <div class="demo-site"><span class="live-dot" aria-hidden="true"></span> example.com</div>
+          <button id="demo-listen" class="talk-button" type="button" aria-pressed="false"><span class="mic-dot" aria-hidden="true"></span><span>Press to talk</span></button>
+          <form id="demo-form">
+            <label for="demo-input">Or type the phrase</label>
+            <div class="input-line"><input id="demo-input" value="focus search" autocomplete="off" /><button type="submit">Check</button></div>
+          </form>
+          <div class="flow" aria-label="Command processing steps">
+            <div><b>1</b><span>HEARD</span><strong id="heard">—</strong></div>
+            <div><b>2</b><span>MATCHED</span><strong id="matched">Waiting</strong></div>
+            <div><b>3</b><span>ALLOWED</span><strong id="allowed">Nothing ran</strong></div>
+          </div>
+          <p id="demo-status" class="demo-status" role="status" aria-live="polite">Nothing is listening.</p>
+        </div>
+      </section>
+
+      <section id="how" class="steps" aria-labelledby="steps-heading">
+        <div>
+          <p class="eyebrow">Small grammar, useful control</p>
+          <h2 id="steps-heading">Set it up once.<br />See every boundary.</h2>
+        </div>
+        <ol>
+          <li><span>01</span><div><h3>Name the action</h3><p>Add an exact phrase such as “focus search,” the website, and a CSS selector for the visible control.</p></div></li>
+          <li><span>02</span><div><h3>Press, then speak</h3><p>The microphone starts only after your press. A typed phrase always remains available.</p></div></li>
+          <li><span>03</span><div><h3>Confirm the risky ones</h3><p>Navigation, submit, delete, publish, payment, and sign-out controls pause and name what will happen.</p></div></li>
+          <li><span>04</span><div><h3>Check the local log</h3><p>See the last 100 attempts, including misses and cancellations. Audio is never saved.</p></div></li>
+        </ol>
+      </section>
+
+      <section id="safety" class="safety" aria-labelledby="safety-heading">
+        <div class="warning-stripe" aria-hidden="true"></div>
+        <div>
+          <p class="eyebrow">Guardrails, not guesswork</p>
+          <h2 id="safety-heading">It cannot improvise.</h2>
+        </div>
+        <ul>
+          <li><strong>Exact phrases only</strong><span>No chatbot and no fuzzy agent deciding what you meant.</span></li>
+          <li><strong>Site-bound actions</strong><span>A command for one hostname does not follow you elsewhere.</span></li>
+          <li><strong>Visible listening state</strong><span>The popup must be open. No hidden background microphone.</span></li>
+          <li><strong>Local records</strong><span>Commands and logs stay in browser storage. Export or clear them anytime.</span></li>
+        </ul>
+      </section>
+
+      <section class="pricing" aria-labelledby="pricing-heading">
+        <div>
+          <p class="eyebrow">Free to start</p>
+          <h2 id="pricing-heading">Five commands may be enough.</h2>
+          <p>The free plan includes five commands on every site, all confirmations, keyboard access, logs, and export.</p>
+        </div>
+        <div class="price-card">
+          <div><span>ONE-TIME</span><strong>$19</strong></div>
+          <p>Unlock 10 commands per website. No subscription and no voice-data account.</p>
+          <a id="buy-link" class="button primary" href="https://pilot-api.sociobot.in/api/v1/products/intent-voice-macros/checkout">Buy once</a>
+          <button id="restore-button" class="restore" type="button">Have a license? Restore it</button>
+          <form id="restore-form" hidden>
+            <label for="license">License token</label>
+            <div class="input-line"><input id="license" name="license" autocomplete="off" spellcheck="false" /><button type="submit">Verify</button></div>
+          </form>
+          <p id="license-status" role="status" aria-live="polite">Sociobot/Dodo is the merchant of record. Refunds revoke the license.</p>
+        </div>
+      </section>
+
+      <section class="honesty" aria-labelledby="honesty-heading">
+        <h2 id="honesty-heading">Built as a complement.</h2>
+        <p>Say the Action is not a replacement for Voice Access, Voice Control, Talon, Dragon, or other platform accessibility tools. It is a narrow extra layer for a few browser workflows you want to inspect yourself. Speech recognition availability and offline language packs vary by browser and operating system.</p>
+      </section>
+    </main>
+    <footer>
+      <div><a class="brand" href="/"><span aria-hidden="true"></span> Say the Action</a><p>A Param Factory utility.</p></div>
+      <nav aria-label="Legal and product"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-intent-voice-macros">Source</a></nav>
+      <p class="provenance">Hero imagery was generated for this product with Azure AI Foundry and reviewed by the builder.</p>
+    </footer>
+    <script type="module" src="/main.ts"></script>
+  </body>
+</html>

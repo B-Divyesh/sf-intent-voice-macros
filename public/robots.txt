@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://intent-voice-macros.sociobot.in/sitemap.xml
