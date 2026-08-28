@@ -37,3 +37,11 @@ test('390px layout has no horizontal overflow and keeps primary action visible',
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 });
+
+test('dark treatment keeps accessible contrast', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'one dark-theme pass is sufficient');
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  await page.goto('/');
+  const results = await new AxeBuilder({ page: page as never }).analyze();
+  expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? ''))).toEqual([]);
+});
