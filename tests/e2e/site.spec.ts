@@ -1,6 +1,13 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test('extension download is a packaged ZIP, never the SPA fallback HTML', async ({ request }) => {
+  const response = await request.get('/downloads/say-the-action.zip');
+  expect(response.ok()).toBe(true);
+  expect(response.headers()['content-type']).toMatch(/^application\/(zip|x-zip-compressed)/i);
+  expect((await response.body()).subarray(0, 4).toString('binary')).toBe('PK\x03\x04');
+});
+
 test('landing page is accessible and the command preview is exact', async ({ page }) => {
   const errors: string[] = [];
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });

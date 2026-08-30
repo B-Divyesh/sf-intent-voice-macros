@@ -1,4 +1,4 @@
-import { access, readFile, stat } from 'node:fs/promises';
+import { access, readFile, readdir, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -6,11 +6,18 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 const zipPath = resolve('dist/site/downloads/say-the-action.zip');
 const configPath = resolve('dist/site/staticwebapp.config.json');
+const outputPath = resolve('.output');
 
 const metadata = await stat(zipPath);
 if (metadata.size < 1_000) throw new Error(`Extension download is unexpectedly small (${metadata.size} bytes): ${zipPath}`);
 const signature = (await readFile(zipPath)).subarray(0, 4).toString('binary');
 if (signature !== 'PK\x03\x04') throw new Error(`Extension download is not a ZIP file: ${zipPath}`);
+const outputZip = (await readdir(outputPath)).find((name) => name.endsWith('.zip'));
+if (!outputZip) throw new Error('Packaged extension ZIP is missing from .output.');
+const [downloadBytes, packagedBytes] = await Promise.all([readFile(zipPath), readFile(resolve(outputPath, outputZip))]);
+if (!downloadBytes.equals(packagedBytes)) {
+  throw new Error('Stable download is not byte-for-byte identical to the packaged extension ZIP.');
+}
 try {
   await execFileAsync('unzip', ['-tqq', zipPath]);
 } catch (error) {

@@ -27,6 +27,7 @@ npm run dev          # WXT extension development
 npm run dev:site     # landing site at localhost
 npm test             # generates WXT types, then runs unit + desktop/mobile Playwright + Axe checks
 npm run build        # extension, zip, and deployable site
+npm run build:site   # complete static deployment root, including the extension ZIP
 ```
 
 `npm run build` produces:
@@ -35,6 +36,11 @@ npm run build        # extension, zip, and deployable site
 - `.output/say-the-action-1.0.0-chrome.zip` — packaged extension
 - `dist/site/index.html` — static deployment root
 - `dist/site/downloads/say-the-action.zip` — stable landing-page download target
+
+`npm run build:site` is intentionally a complete artifact build rather than a
+site-only compile. It rebuilds and copies the ZIP after Vite clears `dist/site`,
+so local previews, tests, and static deployments cannot replace the download
+with the landing-page fallback.
 
 To load locally, open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `.output/chrome-mv3`. Open the extension settings to add a command. Pin the extension or use `Ctrl+Shift+U` (`Command+Shift+U` on macOS) to open its visible command palette.
 
