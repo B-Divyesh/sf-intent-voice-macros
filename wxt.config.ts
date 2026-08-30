@@ -1,14 +1,17 @@
 import { defineConfig } from 'wxt';
 
+const actionHarness = process.env.WXT_ACTION_HARNESS === '1';
+
 export default defineConfig({
   srcDir: '.',
-  outDir: '.output',
+  outDir: actionHarness ? '.output-test' : '.output',
   manifest: {
     name: 'Say the Action',
     short_name: 'Say Action',
-    description: 'A small, local-first voice command layer for approved browser actions.',
-    version: '1.0.0',
+    description: 'Run approved browser actions by voice or typing with exact phrases and safety confirmations.',
+    version: '1.0.1',
     permissions: ['storage', 'activeTab', 'scripting'],
+    ...(actionHarness ? { host_permissions: ['http://127.0.0.1/*'] } : {}),
     action: { default_title: 'Say the Action' },
     commands: {
       _execute_action: {

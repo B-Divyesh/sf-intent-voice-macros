@@ -12,7 +12,8 @@ export default defineConfig({
       input: {
         home: resolve(__dirname, 'site/index.html'),
         privacy: resolve(__dirname, 'site/privacy/index.html'),
-        terms: resolve(__dirname, 'site/terms/index.html')
+        terms: resolve(__dirname, 'site/terms/index.html'),
+        notFound: resolve(__dirname, 'site/404.html')
       }
     }
   }

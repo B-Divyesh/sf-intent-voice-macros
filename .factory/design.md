@@ -58,6 +58,12 @@ Prompt sheet:
 
 Generated with the factory Azure image deployment (`factory-image`) on 2026-08-28. The image is original to this product. Source PNG and prompt sidecar live in `assets/src/`; optimized AVIF (7–13 KB), WebP (10–17 KB), and PNG fallback (194 KB) variants ship in the site. Hand-authored microphone and safety icons are inline SVG and inherit current color.
 
+The 1200×630 social preview is a centered crop of that reviewed original image, reduced to a 128-color PNG. The 180px touch icon is derived from the hand-authored product icon. No new third-party asset was introduced in the repair.
+
+## Demo treatment
+
+Demo mode keeps the control-card identity while making isolation visible. A lemon safety bar stays at the viewport edge and carries Reset demo and Start for real. The seeded support-ticket workspace uses the same hard rules, red talk control, lemon matched state, and balanced Cancel / Run action dialog as the extension popup. At 390px, the banner and action controls stack while retaining 44px targets.
+
 ## Capability honesty
 
 The site shows a bounded command moving into one browser window, never a robot operating an entire computer. Copy consistently says “browser actions” and calls out Web Speech API availability and that this is not a replacement for platform accessibility tools.

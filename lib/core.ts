@@ -1,5 +1,11 @@
 import type { Macro } from './types';
 
+export const MAX_LOG_ENTRIES = 100;
+
+export function withNewestEntry<T>(entries: T[], next: T): T[] {
+  return [next, ...entries].slice(0, MAX_LOG_ENTRIES);
+}
+
 /**
  * Accept one canonical hostname, never a URL, port, path, or query string.
  * Command lookup uses URL.hostname, so persisting anything else would create a

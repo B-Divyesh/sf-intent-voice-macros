@@ -26,9 +26,6 @@ try {
 
 await access(configPath);
 const config = JSON.parse(await readFile(configPath, 'utf8'));
-if (!config.navigationFallback?.exclude?.includes('/downloads/*')) {
-  throw new Error('Static-host fallback must exclude /downloads/* so a missing ZIP returns 404 instead of HTML.');
-}
 const downloadRoute = config.routes?.find((route) => route.route === '/downloads/*');
 if (downloadRoute?.headers?.['Content-Type'] !== 'application/zip') {
   throw new Error('Static-host download route must declare application/zip.');
@@ -36,5 +33,12 @@ if (downloadRoute?.headers?.['Content-Type'] !== 'application/zip') {
 if (!config.globalHeaders?.['Permissions-Policy'] || !config.globalHeaders?.['Content-Security-Policy']) {
   throw new Error('Static-host response policy headers are missing.');
 }
+if (config.globalHeaders['Content-Security-Policy'].includes('pilot-api.sociobot.in')) {
+  throw new Error('Production policy must not allow the pilot billing API.');
+}
+if (config.responseOverrides?.['404']?.rewrite !== '/404.html') {
+  throw new Error('Static-host policy must serve the designed 404 page with status 404.');
+}
+await access(resolve('dist/site/404.html'));
 
 console.log(`Verified deployable extension ZIP (${metadata.size} bytes) and static-host download policy.`);

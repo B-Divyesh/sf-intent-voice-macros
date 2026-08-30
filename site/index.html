@@ -3,123 +3,178 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Say the Action is a small, local-first browser extension for a few voice-approved browser actions." />
+    <meta name="description" content="Run a few approved browser actions by voice or typing, with exact phrases and confirmation for risky actions." />
     <meta name="theme-color" content="#F4F0E6" />
-    <title>Say the Action — voice commands you approve</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Say the Action" />
+    <meta property="og:title" content="Say the Action — browser actions by voice" />
+    <meta property="og:description" content="Run approved browser actions with exact phrases and a safety check for risky actions." />
+    <meta property="og:url" content="https://intent-voice-macros.sociobot.in/" />
+    <meta property="og:image" content="https://intent-voice-macros.sociobot.in/assets/social-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Say the Action — browser actions by voice" />
+    <meta name="twitter:description" content="Run approved browser actions with exact phrases and a safety check for risky actions." />
+    <meta name="twitter:image" content="https://intent-voice-macros.sociobot.in/assets/social-card.png" />
+    <title>Say the Action — browser actions by voice</title>
+    <link id="canonical" rel="canonical" href="https://intent-voice-macros.sociobot.in/" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
     <link rel="preload" href="/assets/hero-control.avif" as="image" type="image/avif" imagesrcset="/assets/hero-control-640.avif 640w, /assets/hero-control.avif 960w" imagesizes="(max-width: 800px) calc(100vw - 40px), 52vw" fetchpriority="high" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
-    <div id="offline" class="offline" hidden role="status"><strong>You’re offline.</strong> This page is cached; the extension itself keeps saved commands local.</div>
+    <div id="offline" class="offline" hidden role="status"><strong>You’re offline.</strong> The saved page and sample workspace still work.</div>
+    <div id="demo-banner" class="demo-banner" hidden role="status">
+      <strong>Demo — sample data, nothing is saved</strong>
+      <div>
+        <button id="reset-demo" type="button">Reset demo</button>
+        <a id="start-real" href="/">Start for real</a>
+      </div>
+    </div>
     <header class="site-header">
       <a class="brand" href="/" aria-label="Say the Action home"><span aria-hidden="true"></span> Say the Action</a>
       <nav aria-label="Primary navigation">
+        <a href="/?demo=1#workspace">Demo</a>
         <a href="#how">How it works</a>
-        <a href="#safety">Safety</a>
+        <a href="/privacy/">Privacy</a>
         <a class="nav-download" href="/downloads/say-the-action.zip">Download</a>
       </nav>
     </header>
     <main id="main">
       <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow"><span>Browser extension</span> · Local-first</p>
-          <h1>Say only<br />the action.</h1>
-          <p class="hero-lede">A small voice-command layer for the browser actions you repeat. You choose the phrase, the site, and the one thing it can do.</p>
+          <p class="eyebrow"><span>Browser extension</span> · Say the Action</p>
+          <h1>Run approved browser actions by voice</h1>
+          <p class="hero-lede">For people with limited keyboard or mouse access who repeat a few browser actions.</p>
           <div class="hero-actions">
-            <a class="button primary" href="/downloads/say-the-action.zip" download>Download extension <span aria-hidden="true">↓</span></a>
-            <a class="button quiet" href="#try">Try the command card</a>
+            <a class="button primary" href="/?demo=1#workspace">Try it with sample data</a>
+            <a class="button quiet" href="/downloads/say-the-action.zip" download>Download extension <span aria-hidden="true">↓</span></a>
           </div>
-          <p class="compatibility">Chrome/Edge MV3 · On-device speech where the browser supports it · Typed fallback included</p>
+          <p class="action-note">The demo opens three sample commands in a separate workspace.</p>
+          <ul class="facts" aria-label="Product facts">
+            <li>10 commands per site are free.</li>
+            <li>Commands and logs stay in browser storage.</li>
+            <li>Risky actions always ask before running.</li>
+          </ul>
         </div>
         <figure class="hero-art">
           <picture>
             <source srcset="/assets/hero-control-640.avif 640w, /assets/hero-control.avif 960w" sizes="(max-width: 800px) calc(100vw - 40px), 52vw" type="image/avif" />
             <source srcset="/assets/hero-control-640.webp 640w, /assets/hero-control.webp 960w" sizes="(max-width: 800px) calc(100vw - 40px), 52vw" type="image/webp" />
-            <img src="/assets/hero-control.png" width="960" height="640" alt="A red push-to-talk switch sends one lemon command card along a short rail into a browser window." fetchpriority="high" loading="eager" decoding="async" />
+            <img src="/assets/hero-control.png" width="960" height="640" alt="A red push-to-talk switch sends one bounded command card into a browser window." fetchpriority="high" loading="eager" decoding="async" />
           </picture>
-          <figcaption><span>01</span> One phrase travels on one approved rail.</figcaption>
+          <figcaption><span>01</span> One phrase reaches one approved action.</figcaption>
         </figure>
       </section>
 
-      <section id="try" class="demo-section" aria-labelledby="demo-heading">
-        <div class="section-tag" aria-hidden="true">TRY IT</div>
+      <section id="workspace" class="demo-section" aria-labelledby="demo-heading">
+        <div class="section-tag" aria-hidden="true">DEMO</div>
         <div class="demo-copy">
-          <h2 id="demo-heading">A command should be inspectable.</h2>
-          <p>This preview never controls the page. Press the switch or type “focus search” to see the exact-match and confirmation flow.</p>
+          <h2 id="demo-heading">Run sample browser actions</h2>
+          <p>Use an exact phrase below. The delete action pauses until you choose Run action.</p>
         </div>
-        <div class="demo" aria-label="Interactive command flow preview">
-          <div class="demo-site"><span class="live-dot" aria-hidden="true"></span> example.com</div>
+        <div class="demo" aria-label="Sample command workspace">
+          <div class="demo-site"><span class="live-dot" aria-hidden="true"></span> support.example</div>
+          <ul id="sample-commands" class="sample-commands" aria-label="Approved sample commands"></ul>
           <button id="demo-listen" class="talk-button" type="button" aria-pressed="false"><span class="mic-dot" aria-hidden="true"></span><span>Press to talk</span></button>
           <form id="demo-form">
-            <label for="demo-input">Or type the phrase</label>
-            <div class="input-line"><input id="demo-input" value="focus search" autocomplete="off" /><button type="submit">Check</button></div>
+            <label for="demo-input">Or type an exact phrase</label>
+            <div class="input-line"><input id="demo-input" value="focus ticket search" autocomplete="off" spellcheck="false" /><button type="submit">Run phrase</button></div>
           </form>
           <div class="flow" aria-label="Command processing steps">
             <div><b>1</b><span>HEARD</span><strong id="heard">—</strong></div>
             <div><b>2</b><span>MATCHED</span><strong id="matched">Waiting</strong></div>
-            <div><b>3</b><span>ALLOWED</span><strong id="allowed">Nothing ran</strong></div>
+            <div><b>3</b><span>ACTION</span><strong id="allowed">Nothing ran</strong></div>
           </div>
-          <p id="demo-status" class="demo-status" role="status" aria-live="polite">Nothing is listening.</p>
+          <p id="demo-status" class="demo-status" role="status" aria-live="polite">Ready for an approved phrase.</p>
+          <div class="sample-page" aria-label="Sample support page">
+            <div>
+              <label for="sample-search">Ticket search</label>
+              <input id="sample-search" placeholder="Search tickets" />
+            </div>
+            <article id="sample-draft">
+              <strong>Draft reply for ticket #1842</strong>
+              <p>Thanks, Morgan. Your replacement keyboard ships today.</p>
+              <button id="sample-delete" type="button">Delete draft reply</button>
+            </article>
+          </div>
+          <div class="activity">
+            <h3>Demo activity</h3>
+            <ul id="demo-log"></ul>
+          </div>
         </div>
       </section>
 
       <section id="how" class="steps" aria-labelledby="steps-heading">
         <div>
-          <p class="eyebrow">Small grammar, useful control</p>
-          <h2 id="steps-heading">Set it up once.<br />See every boundary.</h2>
+          <p class="eyebrow">How it works</p>
+          <h2 id="steps-heading">Set each action boundary</h2>
         </div>
         <ol>
-          <li><span>01</span><div><h3>Name the action</h3><p>Add an exact phrase such as “focus search,” the website, and a CSS selector for the visible control.</p></div></li>
-          <li><span>02</span><div><h3>Press, then speak</h3><p>The microphone starts only after your press. A typed phrase always remains available.</p></div></li>
-          <li><span>03</span><div><h3>Confirm the risky ones</h3><p>Navigation, submit, delete, publish, payment, and sign-out controls pause and name what will happen.</p></div></li>
-          <li><span>04</span><div><h3>Check the local log</h3><p>See the last 100 attempts, including misses and cancellations. Audio is never saved.</p></div></li>
+          <li><span>01</span><div><h3>Name the action</h3><p>Add one phrase, one website, and one visible page control.</p></div></li>
+          <li><span>02</span><div><h3>Press, then speak</h3><p>The microphone starts after your press. You can type the phrase instead.</p></div></li>
+          <li><span>03</span><div><h3>Confirm risky actions</h3><p>Navigation, submit, delete, payment, publish, and sign-out actions pause first.</p></div></li>
+          <li><span>04</span><div><h3>Review the local log</h3><p>The extension keeps the latest 100 results in browser storage.</p></div></li>
         </ol>
       </section>
 
       <section id="safety" class="safety" aria-labelledby="safety-heading">
         <div class="warning-stripe" aria-hidden="true"></div>
         <div>
-          <p class="eyebrow">Guardrails, not guesswork</p>
-          <h2 id="safety-heading">It cannot improvise.</h2>
+          <p class="eyebrow">Privacy and limits</p>
+          <h2 id="safety-heading">The extension follows your list</h2>
         </div>
         <ul>
-          <li><strong>Exact phrases only</strong><span>No chatbot and no fuzzy agent deciding what you meant.</span></li>
-          <li><strong>Site-bound actions</strong><span>A command for one hostname does not follow you elsewhere.</span></li>
-          <li><strong>Visible listening state</strong><span>The popup must be open. No hidden background microphone.</span></li>
-          <li><strong>Local records</strong><span>Commands and logs stay in browser storage. Export or clear them anytime.</span></li>
+          <li><strong>Exact phrases only</strong><span>A similar phrase does not run an action.</span></li>
+          <li><strong>One approved site</strong><span>A command does not follow you to another hostname.</span></li>
+          <li><strong>Visible listening</strong><span>Listening starts only when you press the popup button.</span></li>
+          <li><strong>Local records</strong><span>No audio, analytics, or page content is stored.</span></li>
         </ul>
       </section>
 
       <section class="pricing" aria-labelledby="pricing-heading">
         <div>
-          <p class="eyebrow">Useful for free</p>
-          <h2 id="pricing-heading">Ten actions is the useful starting line.</h2>
-          <p>The free plan includes 10 commands on every site, all confirmations, keyboard access, logs, and export.</p>
+          <p class="eyebrow">Price</p>
+          <h2 id="pricing-heading">Keep 10 commands free</h2>
+          <p>Free includes 10 commands per site, confirmations, keyboard access, logs, and JSON export.</p>
         </div>
         <div class="price-card">
           <div><span>ONE-TIME</span><strong>$19</strong></div>
-          <p>Unlock 25 commands per website. No subscription and no voice-data account.</p>
-          <a id="buy-link" class="button primary" href="https://pilot-api.sociobot.in/api/v1/products/intent-voice-macros/checkout">Buy once</a>
-          <button id="restore-button" class="restore" type="button">Have a license? Restore it</button>
+          <p>The paid license raises the limit to 25 commands per website. There is no subscription.</p>
+          <a id="buy-link" class="button primary" href="https://api.sociobot.in/api/v1/products/intent-voice-macros/checkout">Buy once for $19 <span class="visually-hidden">through Sociobot checkout</span></a>
+          <button id="restore-button" class="restore" type="button">Restore a license</button>
           <form id="restore-form" hidden>
             <label for="license">License token</label>
-            <div class="input-line"><input id="license" name="license" autocomplete="off" spellcheck="false" /><button type="submit">Verify</button></div>
+            <div class="input-line"><input id="license" name="license" autocomplete="off" spellcheck="false" /><button type="submit">Verify license</button></div>
           </form>
-          <p id="license-status" role="status" aria-live="polite">Sociobot/Dodo is the merchant of record. Refunds revoke the license.</p>
+          <p id="license-status" role="status" aria-live="polite">Sociobot/Dodo handles checkout and refunds.</p>
         </div>
       </section>
 
       <section class="honesty" aria-labelledby="honesty-heading">
-        <h2 id="honesty-heading">Built as a complement.</h2>
-        <p>Say the Action is not a replacement for Voice Access, Voice Control, Talon, Dragon, or other platform accessibility tools. It is a narrow extra layer for a few browser workflows you want to inspect yourself. Speech recognition availability and offline language packs vary by browser and operating system.</p>
+        <h2 id="honesty-heading">Use it with accessibility tools</h2>
+        <p>Say the Action does not replace Voice Access, Voice Control, Talon, Dragon, or other platform accessibility tools.</p>
       </section>
     </main>
     <footer>
-      <div><a class="brand" href="/"><span aria-hidden="true"></span> Say the Action</a><p>A Param Factory utility.</p></div>
-      <nav aria-label="Legal and product"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-intent-voice-macros">Source</a></nav>
-      <p class="provenance">Hero imagery was generated for this product with Azure AI Foundry and reviewed by the builder.</p>
+      <div><a class="brand" href="/"><span aria-hidden="true"></span> Say the Action</a><p>Run approved browser actions by voice or typing.</p></div>
+      <nav aria-label="Legal and product"><a href="/?demo=1#workspace">Demo</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-intent-voice-macros">Source <span class="visually-hidden">(external)</span></a></nav>
+      <p class="provenance">Version 1.0.1 · Original hero image generated with Azure AI Foundry.</p>
     </footer>
+
+    <dialog id="action-dialog" aria-labelledby="action-dialog-title" aria-describedby="action-dialog-copy">
+      <form method="dialog" class="dialog-card">
+        <p class="eyebrow">Safety check</p>
+        <h2 id="action-dialog-title">Run this action?</h2>
+        <p id="action-dialog-copy">The sample action is waiting.</p>
+        <div class="dialog-actions">
+          <button id="cancel-sample-action" value="cancel">Cancel</button>
+          <button id="run-sample-action" class="danger-button" value="confirm">Run action</button>
+        </div>
+      </form>
+    </dialog>
     <script type="module" src="/main.ts"></script>
   </body>
 </html>

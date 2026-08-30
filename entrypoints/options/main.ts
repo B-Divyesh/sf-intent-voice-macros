@@ -92,11 +92,16 @@ function renderLogs() {
 
 function renderLicense() {
   const unlocked = canUsePaid(state.license);
-  $('#license-state').innerHTML = unlocked
-    ? '<strong>Unlocked: 25 commands per website.</strong>'
-    : state.license?.reason
-      ? `<strong>License no longer active.</strong> <span>${state.license.reason.replaceAll('_', ' ')}.</span>`
-      : '<strong>Free plan active.</strong>';
+  const licenseState = $('#license-state');
+  licenseState.replaceChildren();
+  const strong = document.createElement('strong');
+  strong.textContent = unlocked ? 'Paid capacity active: 25 commands per website.' : state.license?.reason ? 'License no longer active.' : 'Free plan active.';
+  licenseState.append(strong);
+  if (!unlocked && state.license?.reason) {
+    const reason = document.createElement('span');
+    reason.textContent = ` ${state.license.reason.replaceAll('_', ' ')}.`;
+    licenseState.append(reason);
+  }
   ($('#buy') as HTMLAnchorElement).href = CHECKOUT_URL;
   ($('#buy') as HTMLElement).hidden = unlocked;
 }

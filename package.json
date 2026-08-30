@@ -1,6 +1,6 @@
 {
   "name": "intent-voice-macros",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,10 +10,14 @@
     "prepare:wxt": "wxt prepare",
     "pretest": "npm run prepare:wxt",
     "typecheck": "npm run prepare:wxt && tsc --noEmit",
+    "lint": "node scripts/lint-content.mjs",
     "build:extension": "wxt build && wxt zip",
+    "build:action-harness": "WXT_ACTION_HARNESS=1 wxt build",
     "build:site": "npm run build:extension && vite build --config vite.site.config.ts && node scripts/copy-extension.mjs && node scripts/verify-package.mjs",
     "build": "npm run clean && npm run build:site",
     "test": "vitest run && playwright test",
+    "test:unit": "vitest run",
+    "test:claims": "playwright test tests/e2e/claims.spec.ts --project=chromium",
     "test:e2e": "playwright test",
     "test:package": "npm run build"
   },

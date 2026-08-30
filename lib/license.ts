@@ -1,8 +1,7 @@
 import type { LicenseCache } from './types';
+import { BILLING_BASE, CHECKOUT_URL, PRODUCT_SLUG, readLicenseVerdict } from './billing';
 
-export const PRODUCT_SLUG = 'intent-voice-macros';
-export const BILLING_BASE = 'https://pilot-api.sociobot.in/api/v1';
-export const CHECKOUT_URL = `${BILLING_BASE}/products/${PRODUCT_SLUG}/checkout`;
+export { CHECKOUT_URL, PRODUCT_SLUG };
 export const FREE_COMMAND_LIMIT = 10;
 export const PAID_COMMAND_LIMIT = 25;
 const ONE_DAY = 86_400_000;
@@ -18,8 +17,7 @@ export function commandLimit(cache?: LicenseCache): number {
 
 export async function verifyLicense(token: string): Promise<LicenseCache> {
   const response = await fetch(`${BILLING_BASE}/products/${PRODUCT_SLUG}/verify?license=${encodeURIComponent(token)}`);
-  if (!response.ok) throw new Error('The license service did not respond. Your saved setup is unchanged.');
-  const result = await response.json() as { valid: boolean; reason?: string };
+  const result = await readLicenseVerdict(response);
   return { token, valid: result.valid, reason: result.reason, checkedAt: Date.now() };
 }
 

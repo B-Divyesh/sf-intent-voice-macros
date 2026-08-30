@@ -1,9 +1,9 @@
-const CACHE = 'say-the-action-v1';
-const SHELL = ['/', '/privacy/', '/terms/', '/assets/hero-control.avif', '/assets/hero-control.webp', '/assets/hero-control.png'];
+const CACHE = 'say-the-action-v2';
+const SHELL = ['/', '/?demo=1', '/privacy/', '/terms/', '/404.html', '/assets/hero-control.avif', '/assets/hero-control.webp', '/assets/hero-control.png'];
 self.addEventListener('install', (event) => event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL))));
 self.addEventListener('activate', (event) => event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))));
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+  if (event.request.method !== 'GET' || new URL(event.request.url).origin !== self.location.origin) return;
   event.respondWith(fetch(event.request).then((response) => {
     const copy = response.clone();
     caches.open(CACHE).then((cache) => cache.put(event.request, copy));

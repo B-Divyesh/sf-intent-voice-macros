@@ -1,78 +1,88 @@
 # Say the Action
 
-Say the Action is a small, local-first Chrome/Edge extension for people who need a few repeatable browser actions without depending on a keyboard or mouse. A person approves an exact phrase, one hostname, and one DOM action. The extension does not improvise, execute arbitrary code, or listen in the background.
+Run approved browser actions by voice or typing. Say the Action is a Chrome and Edge extension for people with limited keyboard or mouse access.
 
-Live product page: <https://intent-voice-macros.sociobot.in>
+A person approves one exact phrase, one hostname, and one browser action. Similar phrases do nothing. Risky actions pause for confirmation.
 
-## What v1 does
+Live site: <https://intent-voice-macros.sociobot.in/>
 
-- Push-to-talk speech recognition where the browser exposes the Web Speech API, with local processing requested where supported.
-- Typed command fallback for browsers, offline states, and switch/keyboard access.
-- Exact phrase matching and explicit per-host action allowlists.
-- Focus, click, page-top, page-bottom, and same-host navigation actions.
-- Automatic confirmation for navigation, links, submit controls, and actions labelled delete, remove, pay, send, publish, or sign out.
-- Local-only command cards and a 100-entry outcome log; no audio storage or analytics.
-- Ten commands per site for free, matching the useful baseline; a one-time $19 license raises the limit to twenty-five.
-- JSON export, clear-log control, responsive options screen, and light/dark/reduced-motion treatments.
+Sample demo: <https://intent-voice-macros.sociobot.in/?demo=1#workspace>
 
-This is a complement to—not a replacement for—platform accessibility tools such as Voice Access, Voice Control, Talon, or Dragon.
+## What it does
 
-## Develop
+- Starts listening only after the person presses the talk button.
+- Requests local speech processing when the browser supports it.
+- Keeps typed input available when speech recognition is unavailable.
+- Runs focus, click, page-top, page-bottom, and same-host navigation actions.
+- Confirms navigation, links, submit controls, and actions named delete, remove, pay, send, publish, or sign out.
+- Keeps commands and the latest 100 results in extension browser storage.
+- Stores no audio or analytics data.
+- Exports commands and the local activity log as JSON.
+- Supports 10 commands per site for free.
+- Raises the limit to 25 with a one-time $19 license. There is no subscription.
 
-Requirements: Node.js 20+ and npm.
+Say the Action complements platform accessibility tools. It does not replace Voice Access, Voice Control, Talon, Dragon, or similar tools.
+
+Every public claim has an executable test in [`.factory/claims.json`](./.factory/claims.json). The isolated sample workspace is documented in [`.factory/demo.md`](./.factory/demo.md).
+
+## Run and test
+
+Requirements: Node.js 20 or newer and npm.
 
 ```sh
-npm install
-npm run dev          # WXT extension development
-npm run dev:site     # landing site at localhost
-npm test             # generates WXT types, then runs unit + desktop/mobile Playwright + Axe checks
-npm run build        # extension, zip, and deployable site
-npm run build:site   # complete static deployment root, including the extension ZIP
+npm ci
+npm run dev
+npm run dev:site
+npm test
+npm run typecheck
+npm run build
 ```
+
+`npm test` generates WXT types, builds both products, and runs Vitest, desktop Chromium, 390px mobile, Axe, offline, privacy, billing-fixture, and installed-extension action tests.
 
 `npm run build` produces:
 
-- `.output/chrome-mv3/` — unpacked MV3 extension
-- `.output/say-the-action-1.0.0-chrome.zip` — packaged extension
-- `dist/site/index.html` — static deployment root
-- `dist/site/downloads/say-the-action.zip` — stable landing-page download target
+- `.output/chrome-mv3/` — unpacked MV3 extension.
+- `.output/say-the-action-1.0.1-chrome.zip` — packaged extension.
+- `dist/site/` — deployable static site.
+- `dist/site/downloads/say-the-action.zip` — stable download URL.
 
-`npm run build:site` is intentionally a complete artifact build rather than a
-site-only compile. It rebuilds and copies the ZIP after Vite clears `dist/site`,
-so local previews, tests, and static deployments cannot replace the download
-with the landing-page fallback.
+Load `.output/chrome-mv3` from the browser’s extensions page for local testing. Pin the extension or press `Ctrl+Shift+U` to open its command palette.
 
-To load locally, open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `.output/chrome-mv3`. Open the extension settings to add a command. Pin the extension or use `Ctrl+Shift+U` (`Command+Shift+U` on macOS) to open its visible command palette.
-
-## Configuring a command
+## Configure a command
 
 1. Enter a hostname such as `example.com`.
-2. Choose an exact phrase such as `focus search`.
-3. Choose an action and, for focus/click, a CSS selector such as `#search`.
-4. Leave **Ask before running** enabled unless the action is harmless. Safety checks still force confirmation for recognized irreversible controls.
-5. Open that website, open the popup, and speak or type the exact phrase.
+2. Enter an exact phrase such as `focus search`.
+3. Choose an action.
+4. Add a CSS selector for focus or click actions.
+5. Keep **Ask before running** selected unless the action is harmless.
 
-Same-site navigation accepts only HTTP(S) URLs whose hostname exactly matches the command card. The extension requests `activeTab`, not broad host access, so page access is granted only when the user opens the toolbar popup.
+Navigation accepts only HTTP or HTTPS URLs on the approved hostname. The extension requests `activeTab`, not access to every website.
 
 ## Billing and privacy
 
-Staging builds use the Sociobot pilot billing API. Production release should switch both billing base constants from `https://pilot-api.sociobot.in/api/v1` to `https://api.sociobot.in/api/v1` after the factory registers the product. No payment provider is embedded.
+Checkout and license verification use only `https://api.sociobot.in/api/v1`. The product never embeds a payment provider.
 
-License tokens are stored in site `localStorage` under `sb_license:intent-voice-macros` and separately in extension local storage when pasted into extension settings. Cached valid licenses unlock optimistically and are rechecked at most daily. See `/privacy/` and `/terms/` on the built site.
+Returned tokens use site storage key `sb_license:intent-voice-macros`. The URL token is removed immediately. A cached valid result enables paid capacity without delaying the free experience.
+
+License verification runs at most once each day. A `429` response respects `Retry-After` and keeps the saved setup unchanged. Automated tests use deterministic fixtures and never contact shared checkout.
+
+See the live [privacy policy](https://intent-voice-macros.sociobot.in/privacy/) and [terms](https://intent-voice-macros.sociobot.in/terms/).
 
 ## Project map
 
-- `entrypoints/` — WXT background, popup, and options pages
-- `lib/` — shared command grammar, storage, license, and types
-- `site/` — static landing, privacy, and terms pages
-- `public/` — optimized hero variants, icon, service worker, and cache headers
-- `tests/` — Vitest grammar tests and Playwright/Axe site tests
-- `.factory/design.md` — visual system and generated-asset provenance
-- `.factory/handoff.md` — verification record and release notes
+- `entrypoints/` — extension background, popup, and settings.
+- `lib/` — command rules, injected page action, billing, and storage.
+- `site/` — landing, demo, privacy, terms, and 404 pages.
+- `tests/` — unit, browser, claims, accessibility, and installed-extension tests.
+- `.factory/design.md` — product-specific visual system and asset provenance.
+- `.factory/handoff.md` — release evidence and remaining environment gates.
 
 ## Deploy
 
-Run `npm ci && npm run build`, then publish `dist/site/` as the static root. The factory owns DNS, billing registration, and deployment; this repository does not modify infrastructure.
+Run `npm ci && npm run build`. Publish `dist/site/` as the static root for `sf-intent-voice-macros`.
+
+The factory owns DNS, billing registration, and deployment. This repository contains no cloud credentials.
 
 ## License
 

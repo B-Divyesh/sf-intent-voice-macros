@@ -1,0 +1,114 @@
+[
+  {
+    "id": "packaged-download",
+    "claim": "The download is an installable Chrome and Edge MV3 extension.",
+    "where": "landing download actions, README",
+    "test": "npm run test:claims -- --grep @claim:packaged-download",
+    "sandbox": "fresh production build; assert ZIP signature, content type, and MV3 manifest"
+  },
+  {
+    "id": "exact-approved-phrase",
+    "claim": "Only an exact approved phrase runs its browser action, with typed input available.",
+    "where": "landing first screen, demo, README, extension popup",
+    "test": "npm run test:claims -- --grep @claim:exact-approved-phrase",
+    "sandbox": "fresh ?demo=1 state; try a near match, then the approved phrase and assert focus"
+  },
+  {
+    "id": "demo-isolation",
+    "claim": "The sample demo uses separate storage and discards it when the visitor starts for real.",
+    "where": "demo banner and .factory/demo.md",
+    "test": "npm run test:claims -- --grep @claim:demo-isolation",
+    "sandbox": "preseed a real license key; mutate, reload, reset, and exit ?demo=1; assert the real key is untouched"
+  },
+  {
+    "id": "no-tracking-audio",
+    "claim": "The demo sends no tracking requests, and the extension requests no background audio permission.",
+    "where": "landing privacy section, privacy page, README",
+    "test": "npm run test:claims -- --grep @claim:no-tracking-audio",
+    "sandbox": "record every demo-flow request and inspect the built MV3 permissions"
+  },
+  {
+    "id": "offline-reload",
+    "claim": "The site and sample workspace reload offline after the first visit.",
+    "where": "offline notice, README",
+    "test": "npm run test:claims -- --grep @claim:offline-reload",
+    "sandbox": "own browser context; load ?demo=1 online, wait for service-worker control, set offline, and reload"
+  },
+  {
+    "id": "one-time-license",
+    "claim": "A one-time $19 license raises the per-site limit to 25 with no subscription.",
+    "where": "landing pricing, extension settings, terms, README",
+    "test": "npm run test:claims -- --grep @claim:one-time-license",
+    "sandbox": "production URL assertion plus intercepted 429 fixture with Retry-After; no shared checkout request"
+  },
+  {
+    "id": "license-cache",
+    "claim": "A saved license is rechecked at most once per day without blocking the free experience.",
+    "where": "README billing section and license implementation",
+    "test": "npm run test:unit -- --testNamePattern @claim:license-cache",
+    "sandbox": "fixed clock with fresh, older-than-one-day, and absent license cache fixtures"
+  },
+  {
+    "id": "command-capacity",
+    "claim": "The free extension supports 10 commands per website and a valid license supports 25.",
+    "where": "landing facts and pricing, extension settings, README",
+    "test": "npm run test:unit -- --testNamePattern @claim:command-capacity",
+    "sandbox": "pure limit fixture with no license and with a deterministic valid-license cache"
+  },
+  {
+    "id": "same-site-navigation",
+    "claim": "Navigation commands accept only HTTP or HTTPS URLs on the approved hostname.",
+    "where": "README command setup and extension settings",
+    "test": "npm run test:unit -- --testNamePattern @claim:same-site-navigation",
+    "sandbox": "deterministic same-host, different-host, and javascript URL fixtures"
+  },
+  {
+    "id": "supported-actions",
+    "claim": "The extension supports click, focus, page-top, page-bottom, and same-host navigation actions.",
+    "where": "README feature list and command settings",
+    "test": "npm run test:unit -- --testNamePattern @claim:supported-actions",
+    "sandbox": "assert the production action allowlist contains exactly the five documented bounded actions"
+  },
+  {
+    "id": "log-limit",
+    "claim": "The extension keeps only the latest 100 command results.",
+    "where": "landing how-it-works, extension settings, privacy, README",
+    "test": "npm run test:unit -- --testNamePattern @claim:log-limit",
+    "sandbox": "append one entry to a 100-entry fixture and assert the oldest entry is removed"
+  },
+  {
+    "id": "json-export",
+    "claim": "People can export their commands and local log as JSON.",
+    "where": "landing pricing, extension settings, README",
+    "test": "npm run test:e2e -- --project=chromium --grep @claim:json-export",
+    "sandbox": "fresh installed test profile with 10 commands; download and parse the exported JSON"
+  },
+  {
+    "id": "keyboard-access",
+    "claim": "Command setup and core safety controls work from the keyboard.",
+    "where": "landing pricing, README, extension settings",
+    "test": "npm run test:e2e -- --project=chromium --grep @claim:keyboard-access",
+    "sandbox": "fresh installed extension at 390px; Tab to skip link and submit a command with Enter"
+  },
+  {
+    "id": "push-to-talk-speech",
+    "claim": "Speech starts only after a press and requests local processing when the browser exposes it.",
+    "where": "landing privacy section, README, extension popup",
+    "test": "npm run test:claims -- --grep @claim:push-to-talk-speech",
+    "sandbox": "demo entry with a deterministic SpeechRecognition fixture; assert idle first paint and pressed listening state"
+  },
+  {
+    "id": "risky-confirmation",
+    "claim": "A risky action stays unrun after Cancel and runs only after Run action.",
+    "where": "landing first screen and how-it-works, extension popup, README",
+    "test": "npm run test:e2e -- --project=chromium --grep @claim:risky-confirmation",
+    "sandbox": "installed extension with isolated localhost permission; run production popup and injected page-action code"
+  },
+  {
+    "id": "local-action-data",
+    "claim": "Configured commands and their results remain in extension browser storage.",
+    "where": "landing first screen and privacy section, extension settings, README",
+    "test": "npm run test:e2e -- --project=chromium --grep @claim:local-action-data",
+    "sandbox": "installed extension action flow; inspect local extension storage after run and cancellation"
+  }
+]
