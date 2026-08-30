@@ -1,60 +1,59 @@
 # Say the Action — repair handoff
 
-Build date: 2026-08-28
+Build date: 2026-08-30
 
-Work order: `intent-voice-macros-repair-1`  
-Repair commit: `a4f5163caf66b4ebdb70865fa1a48174b299c103`
+Work order: `intent-voice-macros-repair-2`
+Repair commits: `a4f5163caf66b4ebdb70865fa1a48174b299c103`, `5d5aa13`
 
-Artifact: WXT/TypeScript Chrome MV3 extension plus static Vite product site. The deployment artifact remains `dist/site/` and its primary extension download remains `dist/site/downloads/say-the-action.zip`.
+Artifact: WXT/TypeScript Chrome MV3 extension plus a static Vite product site. The deployment artifact is `dist/site/`; its stable installation target is `dist/site/downloads/say-the-action.zip`.
 
-## Independent-verifier findings repaired
+## Release-blocker repair
 
-1. **P0 download served homepage HTML:** the root build now copies the WXT ZIP to the advertised path and fails unless it is a non-trivial ZIP with `unzip -t` passing. `public/staticwebapp.config.json` excludes `/downloads/*` from SPA fallback, declares `application/zip`, and sets immutable caching. This prevents a missing ZIP from silently becoming the homepage. `public/_headers` carries the same download policy for hosts that use that convention.
-2. **P1 clean `npm test` failure:** `pretest` runs `wxt prepare` before Vitest/Playwright and `typecheck` does the same. A clean checkout no longer relies on an untracked `.wxt/tsconfig.json`.
-3. **P2 hostname with port accepted:** settings now canonicalize and accept only a hostname. Ports, protocol prefixes, paths, queries, credentials, and whitespace are rejected before storage, matching popup lookup by `URL.hostname`.
-4. **P2 five-command contract deviation:** the brief’s 10 user-approved actions per site are now free. The optional $19 one-time license adds capacity to 25; confirmations, accessibility, export, and privacy behavior remain free.
-5. **P3 response policy/cache configuration:** deployable static-host configuration supplies immutable assets/downloads plus `Permissions-Policy`, CSP, referrer, nosniff, and HSTS headers. The package gate asserts the download fallback exclusion, ZIP type route, and required policy headers.
+The independent report in `.factory/verification.md` was first reproduced against the live product: on 2026-08-30 the advertised ZIP URL returned the landing page as `text/html` (8,543 bytes), rather than a browser-extension archive.
 
-## Exact regression coverage
+The earlier repair already addressed the verifier's hostname, free-ten-command, clean-type/test, and static-policy findings. This repair found and fixed the remaining artifact-build root cause: `npm run build:site` let Vite empty `dist/site` but did not restore the extension ZIP. That made a site-only preview or deployment capable of serving the SPA fallback at the advertised download URL.
 
-- Unit coverage rejects `example.com:443`, URL/path/query hostname inputs, and preserves canonical lowercase hostnames.
-- Unit coverage asserts the free 10-command baseline and paid additional capacity.
-- Loaded-MV3 Playwright coverage runs at 390px, focuses the skip link by keyboard, rejects the unusable port hostname, adds exactly 10 free commands, rejects the eleventh, checks no horizontal overflow, Axe serious/critical findings, and console errors.
-- `npm run build` and `npm run test:package` invoke `scripts/verify-package.mjs`, which checks the stable download exists, is a ZIP by signature and `unzip -t`, and has correct static-host routing/header policy.
+- `build:site` now builds and zips the MV3 extension, builds the site, copies the ZIP to its public stable name, and verifies the completed artifact.
+- `build` now cleans and invokes that complete `build:site` artifact build.
+- Package verification now requires the stable download to be byte-for-byte identical to the WXT-produced ZIP as well as valid under `unzip -t`.
+- Browser regression coverage requests `/downloads/say-the-action.zip` from the built static server and requires a ZIP MIME type and `PK\x03\x04` signature. The exact previous HTML fallback therefore fails `npm test`.
 
-## Verification run
+Existing coverage continues to reject port/path/protocol hostnames, assert 10 free commands per site plus paid capacity, load the packaged MV3 settings at 390px, and verify the static routing/policy configuration.
 
-From a clean dependency install:
+## Verification
+
+Completed on the current worker image:
 
 ```sh
 npm ci
+npm run clean && npm run build:site
 npm test
 npm run typecheck
 npm run test:package
 ```
 
-Results on repair commit:
+- Clean install: passed; production audit reported 0 vulnerabilities.
+- Unit tests: 5 passed.
+- Browser/Axe suite: 9 passed, 3 intentional project-specific skips. It covers desktop, 390px, keyboard focus, dark/reduced-motion, exact command preview, packaged extension settings, and the ZIP response regression.
+- Typecheck: passed after generated WXT types are prepared by the documented command.
+- Production package: passed. `dist/site/downloads/say-the-action.zip` is a 259,800-byte valid ZIP and exactly equals `.output/say-the-action-1.0.0-chrome.zip`.
+- Artifact budgets: landing JavaScript 4.16 KB and CSS 9.29 KB before gzip; no third-party fonts, scripts, analytics, or trackers were added.
 
-- `npm ci`: pass; `npm audit`: 0 vulnerabilities.
-- `npm test`: pass — 5 Vitest tests; 7 Playwright checks passed with 3 intentional project-specific skips. Includes desktop Chromium, 390px site and loaded-extension coverage, keyboard smoke test, reduced-motion/dark check, and Axe checks with 0 serious/critical violations.
-- `npm run typecheck`: pass.
-- `npm run test:package`: pass. Built ZIP is 259,800 bytes at `dist/site/downloads/say-the-action.zip`; `unzip -t` reports no errors; deployment policy verification passes.
-- Static budgets remain under limit: home JS 4.16 KB and CSS 9.29 KB; no third-party fonts, scripts, trackers, or analytics are introduced. Browser storage remains local-first; only the existing Sociobot pilot license endpoint is contacted when a person supplies a token.
+## Deployment and live verification
 
-## Deployment and release check
+Committed and pushed `5d5aa13` to `main`, then deployed the verified `dist/site/` artifact to the permitted `sf-intent-voice-macros` static app.
 
-Publish by pushing this branch and build the static root with `npm ci && npm run build`; publish **the complete `dist/site/` directory**, including `downloads/say-the-action.zip` and `staticwebapp.config.json`. The live validation to perform after the deployment updates is:
+Live URL: <https://intent-voice-macros.sociobot.in>
 
-```sh
-curl -I https://intent-voice-macros.sociobot.in/downloads/say-the-action.zip
-curl -fsS https://intent-voice-macros.sociobot.in/downloads/say-the-action.zip -o /tmp/say-the-action.zip
-unzip -t /tmp/say-the-action.zip
-```
+- `GET /downloads/say-the-action.zip`: `200`, `content-type: application/zip`, `cache-control: public, max-age=31536000, immutable`, 259,800 bytes.
+- `unzip -tqq` passed for the downloaded archive. Its SHA-256, the staged download, and WXT ZIP are all `6d0841a15cef814448a7377afe0f1a216e0d2392ad4a019406b7ad876e698e19`.
+- Live response policy includes CSP, `Permissions-Policy: microphone=(self)`, `X-Content-Type-Options: nosniff`, strict-origin referrer policy, and HSTS.
+- `/opt/fleet/lib/verify-url.sh` reported title, `lang="en"`, exactly one `h1`, one `main`, no images without alt text, and no page/console errors.
+- Live Playwright/Axe desktop check: 0 serious/critical violations, skip link focused by Tab, and no third-party requests during the normal page flow. At 390px, horizontal overflow was 0px.
+- After one online reload the live service worker controlled the page; an isolated offline reload succeeded and showed the offline banner.
 
-Expected: `content-type: application/zip`, a ZIP response (not homepage HTML), and a successful integrity check. Also check the CSP and `Permissions-Policy` headers, then reload once online and once offline to confirm the versioned service worker has updated its cached shell.
+## Known limits
 
-## Known product limits
-
-- Speech recognition availability and local processing are browser/OS dependent; the typed command path remains available.
-- User-authored selectors can break after a target site redesign; a failed target is reported and does nothing.
-- Staging uses the Sociobot pilot billing API. Factory-owned production registration still needs the billing base constants and buy-link fallback switched to `https://api.sociobot.in/api/v1`.
+- Browser/OS speech recognition and local language-pack availability vary. The typed command path remains available.
+- User-authored CSS selectors can stop matching after a target site changes; the extension reports the miss and takes no action.
+- The currently deployed paid-link constants still use the factory pilot billing endpoint. Switch both constants to the production Sociobot API only after factory product registration is supplied; this does not affect the free useful baseline or local command storage.
