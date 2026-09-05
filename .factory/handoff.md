@@ -1,8 +1,14 @@
-# Say the Action — repair handoff
+# Say the Action — handoff
 
-**Release verdict: PASS**
+**Current independent QA verdict: FAIL**
 
-Work order: `intent-voice-macros-repair-3`
+The repair evidence below remains valid for the implementation, but fresh
+verification 3 found two release-contract findings: one untested public privacy
+claim and a missing landing-footer factory attribution. See
+[`.factory/verification-3.md`](./verification-3.md). Do not treat the earlier
+repair PASS as the current release verdict.
+
+Repair work order: `intent-voice-macros-repair-3`
 
 Repaired candidate: `95281555864ca2dd51ae78f5a187dcec71331de7`
 
@@ -107,3 +113,21 @@ The work order forbids connecting to shared resources outside `sf-intent-voice-m
 
 - Speech recognition and local language-pack support still depend on the browser and operating system. Typed commands remain available.
 - The external checkout’s availability was not probed because the work-order resource boundary explicitly prohibits that connection.
+- Verification 3 found that the live site and README promise that no audio or page content is stored, without a matching declared and observable claim test. This is a P1 release finding.
+- Verification 3 found that the landing footer omits “Built by Param Factory,” although the legal and 404 footers include it. This is a P2 release finding.
+
+## Independent verification 3
+
+Verified 2026-09-05 from clean `npm ci` against implementation commit
+`629fa5808ba053e51f9d000d043a4b8e5a222265`; documentation/deployment evidence
+commit `3f432cc3403a8c363cc31d3e8ed4028e52c18f3a` changes only this handoff.
+
+- `npm run lint`, `npm run typecheck`, `npm test`, and `npm run build` passed.
+- All 16 declared claim commands passed individually.
+- Fresh desktop and 390px live checks passed the first-read, sample sandbox,
+  reset/start-real isolation, offline reload, keyboard, reduced-motion, route,
+  link, header, ZIP, and live Axe checks.
+- The external checkout remained unprobed by scope; deterministic
+  production-origin fixtures cover the 429/`Retry-After` path.
+
+The current verdict is **FAIL** with 2 findings and 1 untested public claim.
