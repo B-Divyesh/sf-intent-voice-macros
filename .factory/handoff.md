@@ -21,7 +21,7 @@ Say the Action is a Chrome and Edge extension for people with limited keyboard o
 - Added **Built by Param Factory** to the landing footer and a browser regression check that requires it there.
 - Declared the existing public privacy statement as the `no-audio-page-storage` claim.
 - Added an outcome-based browser check: a deterministic spoken command runs in the demo, a marked sample-page string is never persisted, persisted data has only the approved command/outcome schema, and all demo requests remain same-origin.
-- Updated the README privacy statement, landing-copy audit, and catalog description. The catalog description starts with a verb, is 47 characters, and is copied to `/work/.evidence/catalog-description.txt`.
+- Updated the README privacy statement, landing-copy audit, and catalog description. The catalog description starts with a verb, is within the 120-character limit, and is copied to `/work/.evidence/catalog-description.txt`.
 
 ## Run and verify
 
