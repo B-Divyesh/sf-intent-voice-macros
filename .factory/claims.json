@@ -28,6 +28,13 @@
     "sandbox": "record every demo-flow request and inspect the built MV3 permissions"
   },
   {
+    "id": "no-audio-page-storage",
+    "claim": "No audio, analytics, or page content is stored.",
+    "where": "landing privacy section, privacy page, README",
+    "test": "npm run test:claims -- --grep @claim:no-audio-page-storage",
+    "sandbox": "deterministic speech result with marked sample-page content; assert the only persisted demo schema is approved commands and local outcomes, the page marker is absent, and all requests stay same-origin"
+  },
+  {
     "id": "offline-reload",
     "claim": "The site and sample workspace reload offline after the first visit.",
     "where": "offline notice, README",

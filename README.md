@@ -16,7 +16,7 @@ Sample demo: <https://intent-voice-macros.sociobot.in/?demo=1#workspace>
 - Runs focus, click, page-top, page-bottom, and same-host navigation actions.
 - Confirms navigation, links, submit controls, and actions named delete, remove, pay, send, publish, or sign out.
 - Keeps commands and the latest 100 results in extension browser storage.
-- Stores no audio or analytics data.
+- Stores no audio, analytics, or page content.
 - Exports commands and the local activity log as JSON.
 - Supports 10 commands per site for free.
 - Raises the limit to 25 with a one-time $19 license. There is no subscription.

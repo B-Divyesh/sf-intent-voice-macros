@@ -1,6 +1,6 @@
 # Say the Action copy audit
 
-Audited 2026-08-30. Counts treat numbers and contractions as one word. Headings, labels, buttons, facts, helper text, and dynamic status messages were also checked. No landing-page text exceeds 22 words. No text uses `leverage`, `seamless`, `effortless`, `robust`, `powerful`, `intuitive`, `reimagine`, `supercharge`, `delightful`, `journey`, `ecosystem`, or `AI-powered`.
+Audited 2026-09-06. Counts treat numbers and contractions as one word. Headings, labels, buttons, facts, helper text, and dynamic status messages were also checked. No landing-page text exceeds 22 words. No text uses `leverage`, `seamless`, `effortless`, `robust`, `powerful`, `intuitive`, `reimagine`, `supercharge`, `delightful`, `journey`, `ecosystem`, or `AI-powered`.
 
 ## Static sentences
 
@@ -33,7 +33,7 @@ Audited 2026-08-30. Counts treat numbers and contractions as one word. Headings,
 | 6 | Sociobot/Dodo handles checkout and refunds. |
 | 17 | Say the Action does not replace Voice Access, Voice Control, Talon, Dragon, or other platform accessibility tools. |
 | 8 | Run approved browser actions by voice or typing. |
-| 10 | Version 1.0.1 · Original hero image generated with Azure AI Foundry. |
+| 14 | Built by Param Factory · Version 1.0.1 · Original hero image generated with Azure AI Foundry. |
 | 3 | Run this action? |
 | 5 | The sample action is waiting. |
 

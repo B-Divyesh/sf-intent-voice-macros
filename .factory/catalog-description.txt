@@ -1,0 +1,1 @@
+Run approved browser actions by voice or typing.

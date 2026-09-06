@@ -17,6 +17,7 @@ test('landing page has plain audience copy, keyboard structure, and no console e
   await expect(page.locator('h1')).toHaveText('Run approved browser actions by voice');
   await expect(page.getByText(/limited keyboard or mouse access/)).toBeVisible();
   await expect(page.getByRole('link', { name: 'Try it with sample data' })).toBeVisible();
+  await expect(page.locator('footer')).toContainText('Built by Param Factory');
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeFocused();
   expect(await seriousAxeViolations(page)).toEqual([]);

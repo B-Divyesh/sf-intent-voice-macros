@@ -59,6 +59,53 @@ test('@claim:no-tracking-audio keeps demo traffic same-origin and requests no au
   expect((manifest as { host_permissions?: string[] }).host_permissions ?? []).toEqual([]);
 });
 
+test('@claim:no-audio-page-storage keeps speech, analytics, and page content out of persisted sample data', async ({ page, baseURL }) => {
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
+  await page.addInitScript(() => {
+    class RecognitionMock {
+      lang = '';
+      continuous = false;
+      interimResults = false;
+      processLocally = false;
+      onresult: ((event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void) | null = null;
+      onerror = null;
+      onend = null;
+      constructor() { (window as unknown as { __privacyRecognition: RecognitionMock }).__privacyRecognition = this; }
+      start() {}
+      stop() {}
+    }
+    Object.defineProperty(window, 'SpeechRecognition', { value: RecognitionMock });
+  });
+  await page.goto('/?demo=1#workspace');
+  const privatePageMarker = 'PRIVATE SUPPORT NOTE: member 1842 uses a replacement keyboard.';
+  await page.locator('#sample-draft').evaluate((element, marker) => element.append(` ${marker}`), privatePageMarker);
+  await page.getByRole('button', { name: 'Press to talk' }).click();
+  await page.evaluate(() => {
+    const recognition = (window as unknown as {
+      __privacyRecognition: { onresult: ((event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void) | null };
+    }).__privacyRecognition;
+    recognition.onresult?.({ results: [{ 0: { transcript: 'focus ticket search' } }] });
+  });
+  await expect(page.getByText('Done: Focus the ticket search field.')).toBeVisible();
+  await expect(page.getByLabel('Ticket search')).toBeFocused();
+
+  const persisted = await page.evaluate(() => {
+    const key = 'demo:intent-voice-macros:workspace';
+    return { keys: Object.keys(localStorage), state: JSON.parse(localStorage.getItem(key) ?? 'null') };
+  });
+  expect(persisted.keys).toEqual(['demo:intent-voice-macros:workspace']);
+  expect(Object.keys(persisted.state).sort()).toEqual(['commands', 'draftPresent', 'logs']);
+  expect(persisted.state.commands).toEqual(expect.arrayContaining([
+    { phrase: 'focus ticket search', label: 'Focus the ticket search field', kind: 'focus' }
+  ]));
+  expect(persisted.state.logs[0]).toEqual({ phrase: 'focus ticket search', result: 'ran' });
+  expect(persisted.state.logs.every((entry: Record<string, unknown>) => Object.keys(entry).sort().join(',') === 'phrase,result')).toBe(true);
+  expect(JSON.stringify(persisted.state)).not.toContain(privatePageMarker);
+  const expectedOrigin = new URL(baseURL!).origin;
+  expect([...new Set(requests.map((url) => new URL(url).origin))]).toEqual([expectedOrigin]);
+});
+
 test('@claim:push-to-talk-speech starts only on press and requests local processing when available', async ({ page }) => {
   await page.addInitScript(() => {
     class RecognitionMock {
